@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BrainField LLC — small language models, agents, orchestration</title>
+<meta name="description" content="BrainField LLC is an AI, ML and data engineering consultancy. We build custom small language models, agents, and the orchestration that runs them in production.">
+<meta property="og:title" content="BrainField LLC">
+<meta property="og:description" content="Custom small language models, agents, and orchestration — built to run in production.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://brainfieldllc.com/">
+<link rel="canonical" href="https://brainfieldllc.com/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23101F35'/><g stroke='%23E0A93B' stroke-width='2.6' stroke-linecap='round'><line x1='7' y1='22' x2='13' y2='13'/><line x1='15' y1='24' x2='23' y2='16'/><line x1='9' y1='11' x2='17' y2='8'/></g></svg>">
+
+<style>
+  :root{
+    --ink:#101f35;
+    --ink-soft:#1d3452;
+    --paper:#eceee9;
+    --paper-lift:#f7f8f5;
+    --field:#2f6f63;
+    --gold:#e0a93b;
+    --muted:#5b6a78;
+    --rule:#cfd4cd;
+    --sans:"Bricolage Grotesque",ui-sans-serif,"Helvetica Neue",Arial,sans-serif;
+    --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    --shell:min(1160px,100% - 3rem);
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:clamp(1.02rem,0.98rem + 0.2vw,1.14rem);
+    line-height:1.68;
+  }
+  h1,h2,h3,.sans{font-family:var(--sans);font-weight:600;letter-spacing:-0.02em;line-height:1.06}
+  p{max-width:62ch}
+  a{color:inherit}
+  a:focus-visible,button:focus-visible{outline:2.5px solid var(--gold);outline-offset:3px;border-radius:2px}
+  .shell{width:var(--shell);margin-inline:auto}
+  .skip{position:absolute;left:-9999px}
+  .skip:focus{left:1rem;top:1rem;z-index:9;background:var(--gold);color:var(--ink);padding:.6rem 1rem}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;background:var(--ink);color:#eef1f4;overflow:hidden;isolation:isolate}
+  #field{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+  .hero::after{
+    content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:linear-gradient(105deg,rgba(16,31,53,.94) 34%,rgba(16,31,53,.55) 66%,rgba(16,31,53,.2));
+  }
+  .hero .shell{position:relative;z-index:2;padding:2rem 0 clamp(4.5rem,9vw,7.5rem)}
+  .masthead{display:flex;align-items:baseline;gap:.9rem;padding-block:1rem 5rem}
+  .mark{font-family:var(--sans);font-weight:700;font-size:1.06rem;letter-spacing:-.01em}
+  .mark span{color:var(--gold)}
+  .masthead nav{margin-left:auto;display:flex;gap:1.6rem;font-family:var(--sans);font-size:.95rem;font-weight:500}
+  .masthead nav a{color:#c3ccd6;text-decoration:none;padding-bottom:2px;border-bottom:1px solid transparent}
+  .masthead nav a:hover{color:#fff;border-bottom-color:var(--gold)}
+
+  @media(max-width:600px){
+    .masthead{flex-wrap:wrap;padding-block:.75rem 3rem}
+    .masthead nav{width:100%;margin-left:0;gap:1.2rem;font-size:.9rem;padding-top:.95rem}
+  }
+
+  h1{
+    font-size:clamp(3.1rem,1.6rem + 6.4vw,6.6rem);
+    margin:0 0 1.4rem;font-weight:700;letter-spacing:-.035em;
+  }
+  h1 em{font-style:normal}
+  .lede{
+    font-size:clamp(1.22rem,1.05rem + .7vw,1.62rem);
+    line-height:1.44;max-width:24ch;margin:0 0 1.5rem;color:#f2f5f8;
+  }
+  .sub{color:#a9b6c4;max-width:52ch;margin:0 0 2.4rem}
+  .cta-row{display:flex;flex-wrap:wrap;gap:.9rem;align-items:center}
+  .btn{
+    font-family:var(--sans);font-size:1rem;font-weight:600;text-decoration:none;
+    padding:.85rem 1.5rem;display:inline-block;
+  }
+  .btn-solid{background:var(--gold);color:#15243a}
+  .btn-solid:hover{background:#f0bc4f}
+  .btn-line{border:1px solid #55677c;color:#e7ecf1}
+  .btn-line:hover{border-color:var(--gold);color:#fff}
+
+  /* ---------- shared section rhythm ---------- */
+  section{padding-block:clamp(4rem,7vw,6.5rem)}
+  .section-head{font-size:clamp(1.75rem,1.3rem + 1.5vw,2.5rem);margin:0 0 2.8rem;max-width:20ch}
+
+  /* ---------- practice ---------- */
+  .practice{display:grid;gap:2.6rem}
+  @media(min-width:820px){.practice{grid-template-columns:1fr 1fr;gap:3.4rem 4rem}}
+  .practice article{border-top:2px solid var(--ink);padding-top:1.1rem}
+  .practice h3{font-size:1.45rem;margin:0 0 .6rem}
+  .practice p{margin:0;color:#34434f}
+  .practice .tag{
+    font-family:var(--sans);font-size:.9rem;font-weight:500;color:var(--field);
+    display:block;margin-top:.9rem;
+  }
+
+  /* ---------- engagement (a real sequence) ---------- */
+  .engagement{background:var(--ink);color:#e9eef3}
+  .engagement .section-head{color:#fff}
+  .steps{list-style:none;margin:0;padding:0;counter-reset:step;display:grid;gap:0}
+  .steps li{
+    counter-increment:step;display:grid;gap:.3rem 1.6rem;
+    padding:1.7rem 0;border-top:1px solid #2b405c;
+  }
+  .steps li:last-child{border-bottom:1px solid #2b405c}
+  @media(min-width:760px){
+    .steps li{grid-template-columns:4.5rem 15rem 1fr;align-items:baseline}
+  }
+  .steps li::before{
+    content:counter(step,decimal-leading-zero);
+    font-family:var(--sans);font-weight:700;font-size:1.1rem;color:var(--gold);
+  }
+  .steps h3{font-size:1.2rem;margin:0;color:#fff}
+  .steps p{margin:0;color:#a9b6c4;max-width:56ch}
+
+  /* ---------- capability list ---------- */
+  .stack{display:grid;gap:2.2rem}
+  @media(min-width:760px){.stack{grid-template-columns:minmax(0,26ch) 1fr;gap:4rem}}
+  .stack ul{list-style:none;margin:0;padding:0;columns:2;column-gap:2.5rem}
+  @media(max-width:560px){.stack ul{columns:1}}
+  .stack li{
+    font-family:var(--sans);font-size:1rem;padding:.55rem 0;
+    border-bottom:1px solid var(--rule);break-inside:avoid;
+  }
+
+  /* ---------- proof ---------- */
+  .proof{background:var(--paper-lift);border-block:1px solid var(--rule)}
+  .proof blockquote{
+    margin:0;font-size:clamp(1.3rem,1.1rem + 1vw,1.9rem);line-height:1.42;max-width:30ch;
+  }
+  .proof-grid{display:grid;gap:2.6rem}
+  @media(min-width:820px){.proof-grid{grid-template-columns:1.1fr 1fr;gap:4.5rem;align-items:start}}
+  .proof p{color:#34434f}
+
+  /* ---------- contact ---------- */
+  .contact h2{font-size:clamp(2rem,1.4rem + 2.4vw,3.4rem);margin:0 0 1.2rem;max-width:16ch}
+  .contact .mail{
+    font-family:var(--sans);font-size:clamp(1.15rem,1rem + .8vw,1.7rem);font-weight:600;
+    text-decoration:none;border-bottom:3px solid var(--gold);padding-bottom:.15rem;
+    display:inline-block;margin-top:.8rem;
+  }
+  .contact .mail:hover{border-bottom-color:var(--field)}
+
+  footer{background:var(--ink);color:#8f9dab;font-size:.95rem;padding-block:2.6rem}
+  footer .shell{display:flex;flex-wrap:wrap;gap:.6rem 2.4rem;align-items:baseline}
+  footer .mark{color:#e9eef3}
+  footer a{color:#8f9dab}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="hero">
+  <svg id="field" aria-hidden="true" preserveAspectRatio="xMidYMid slice"></svg>
+  <div class="shell">
+    <div class="masthead">
+      <span class="mark">BrainField<span>.</span></span>
+      <nav>
+        <a href="#work">What we build</a>
+        <a href="#engagement">How we work</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+
+    <h1>Models that<br>hold their shape</h1>
+    <p class="lede">We build small language models, agents, and the
+      orchestration that keeps them running.</p>
+    <p class="sub">BrainField is an AI, machine learning and data engineering
+      practice. We work with teams who already have data and now need
+      something dependable on top of it.</p>
+    <div class="cta-row">
+      <a class="btn btn-solid" href="#contact">Start a conversation</a>
+      <a class="btn btn-line" href="#engagement">See how an engagement runs</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<section id="work" class="shell">
+  <h2 class="section-head">Four things we are asked for, over and over</h2>
+  <div class="practice">
+    <article>
+      <h3>Small language models</h3>
+      <p>A compact model trained on your own documents, tickets and product
+        data. It runs on hardware you control, costs a fraction of a frontier
+        API call, and does not leak anything to a vendor. We handle data
+        preparation, fine-tuning, evaluation and the serving stack.</p>
+      <span class="tag">Fine-tuning, distillation, evaluation harnesses</span>
+    </article>
+    <article>
+      <h3>Agents that finish the job</h3>
+      <p>Most agent demos fall apart on the second turn. We design agents
+        around real tools and real permissions, with the retries, guardrails
+        and audit trail that let a business actually depend on the output.</p>
+      <span class="tag">Tool use, retrieval, guardrails, evaluation</span>
+    </article>
+    <article>
+      <h3>Orchestration you can operate</h3>
+      <p>One agent is a prototype. Twelve agents sharing state, budget and
+        failure modes is a system. We build the routing, memory and
+        observability layer so your team can debug it at 2am without calling
+        us.</p>
+      <span class="tag">Multi-agent routing, state, tracing, cost control</span>
+    </article>
+    <article>
+      <h3>The data underneath</h3>
+      <p>Features, pipelines and warehouses that feed the models. Usually the
+        least glamorous half of the work and the half that decides whether
+        anything above it survives contact with production.</p>
+      <span class="tag">Feature stores, pipelines, warehouse modelling</span>
+    </article>
+  </div>
+</section>
+
+<section id="engagement" class="engagement">
+  <div class="shell">
+    <h2 class="section-head">How an engagement runs</h2>
+    <ol class="steps">
+      <li>
+        <h3>Diagnostic</h3>
+        <p>Two weeks. We read the data, talk to the people using it, and come
+          back with what is worth building and what is not. You keep the
+          write-up either way.</p>
+      </li>
+      <li>
+        <h3>Prototype</h3>
+        <p>Four to six weeks to a working thing on your data, measured against
+          a metric you agreed to before we started.</p>
+      </li>
+      <li>
+        <h3>Production</h3>
+        <p>Serving, monitoring, cost controls, rollback. The unglamorous
+          months where a demo becomes something on call.</p>
+      </li>
+      <li>
+        <h3>Handover</h3>
+        <p>Your engineers own it. We document, pair, and step back. A good
+          engagement ends with you not needing us.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="proof">
+  <div class="shell proof-grid">
+    <blockquote>Twenty years of shipping data systems, most of them
+      before anyone called it AI.</blockquote>
+    <div>
+      <p>BrainField is led by an engineer who has spent two decades building
+        data and machine learning platforms for large retail and e-commerce
+        organisations — feature stores serving live traffic, warehouse
+        migrations, recommendation systems, and multi-agent analytics
+        platforms on Google Cloud and AWS.</p>
+      <p>That history is why we tend to argue for the smaller model, the
+        boring pipeline and the shorter dependency list. It is usually what
+        is still running two years later.</p>
+    </div>
+  </div>
+</section>
+
+<section class="shell">
+  <div class="stack">
+    <h2 class="section-head" style="margin-bottom:0">What we work in</h2>
+    <ul>
+      <li>Google Cloud, Vertex AI</li>
+      <li>AWS, SageMaker</li>
+      <li>BigQuery, Snowflake</li>
+      <li>Vertex Feature Store</li>
+      <li>PyTorch, Hugging Face</li>
+      <li>LangGraph, MCP</li>
+      <li>Airflow, dbt</li>
+      <li>Looker, LookML</li>
+      <li>Kubernetes, Cloud Run</li>
+      <li>Python, SQL, Java</li>
+    </ul>
+  </div>
+</section>
+
+<section id="contact" class="shell contact">
+  <h2>Tell us what is not working</h2>
+  <p>Send a short note about the problem — the data you have, what you want
+    it to do, and the deadline you are up against. You will get an answer
+    from an engineer, not a sales team.</p>
+  <a class="mail" href="mailto:hello@brainfieldllc.com">hello@brainfieldllc.com</a>
+</section>
+
+</main>
+
+<footer>
+  <div class="shell">
+    <span class="mark">BrainField LLC</span>
+    <span>Massachusetts, United States</span>
+    <span><a href="mailto:hello@brainfieldllc.com">hello@brainfieldllc.com</a></span>
+    <span>&copy; 2026</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var svg = document.getElementById('field');
+  if (!svg) return;
+
+  var W = 1200, H = 700, STEP = 42;
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var strokes = [];
+  var ns = 'http://www.w3.org/2000/svg';
+
+  // A vector field: every stroke points along a smooth flow, so the hero
+  // reads as one continuous field rather than a decorative grid.
+  function angleAt(x, y) {
+    return Math.sin(x / 260) * 0.9 + Math.cos(y / 190) * 0.7 + (x + y) / 2600;
+  }
+
+  for (var y = STEP; y < H; y += STEP) {
+    for (var x = STEP; x < W + STEP; x += STEP) {
+      var line = document.createElementNS(ns, 'line');
+      var len = 13;
+      line.setAttribute('x1', -len); line.setAttribute('y1', 0);
+      line.setAttribute('x2', len);  line.setAttribute('y2', 0);
+      var lit = (x > W * 0.42) && (Math.random() < 0.055);
+      line.setAttribute('stroke', lit ? '#e0a93b' : '#3d6f8f');
+      line.setAttribute('stroke-width', lit ? 2.2 : 1.4);
+      line.setAttribute('stroke-linecap', 'round');
+      line.setAttribute('opacity', lit ? 0.95 : (0.20 + (x / W) * 0.42));
+      var target = angleAt(x, y) * 57.2958;
+      var start = reduce ? target : target + (Math.random() * 260 - 130);
+      line.setAttribute('transform',
+        'translate(' + x + ',' + y + ') rotate(' + start + ')');
+      svg.appendChild(line);
+      strokes.push({ el: line, x: x, y: y, from: start, to: target });
+    }
+  }
+
+  if (reduce) return;
+
+  // One orchestrated moment on load: the field settles into alignment.
+  var t0 = null, DUR = 1500;
+  function ease(t) { return 1 - Math.pow(1 - t, 3); }
+  function frame(ts) {
+    if (t0 === null) t0 = ts;
+    var p = Math.min((ts - t0) / DUR, 1), e = ease(p);
+    for (var i = 0; i < strokes.length; i++) {
+      var s = strokes[i];
+      var a = s.from + (s.to - s.from) * e;
+      s.el.setAttribute('transform',
+        'translate(' + s.x + ',' + s.y + ') rotate(' + a + ')');
+    }
+    if (p < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
